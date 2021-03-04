@@ -3,6 +3,7 @@ const Database = require("@replit/database")
 const db = new Database()
 const app = express()
 const axios = require('axios')
+const fs = require('fs')
 
 if (!fs.existsSync('ok.js')) {
   axios.request({
